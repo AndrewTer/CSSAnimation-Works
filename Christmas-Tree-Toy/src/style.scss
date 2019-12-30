@@ -1,0 +1,342 @@
+$globe-width: 12px;
+$globe-height: 28px;
+$globe-spacing: 50px;
+$globe-spread: 3px;
+$light-off-opacity: 0.4;
+
+body {
+  background-color: black;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.parent {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  overflow: auto;   
+}
+
+.circle-wrapper {
+  position: relative;
+  background: radial-gradient(ellipse at bottom, #131D28 0%, #090a0f 100%);
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: 50%;
+  border: 6px solid darken(red, 25%);
+  filter: drop-shadow(0 0 10px white);
+}
+
+.pin {
+  position: relative;
+  background: linear-gradient(100deg, darken(gray, 40%), darken(gray, 12%));
+  width: 30px;
+  height: 50px;
+  margin: 40px auto 0 auto;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: 10px;
+  border: 2px solid darken(gray, 30%);
+}
+
+.thread {
+  position: absolute;
+  background: darken(gray, 40%);
+  width: 10px;
+  height: 50px;
+  top: -5px;
+  left: 138px;
+  border-radius: 10px;
+  border: 2px solid darken(gray, 44%);
+}
+
+.christmas-tree-toy {
+  position: absolute;
+  background: linear-gradient(140deg, darken(red, 90%), darken(red, 10%));
+  width: 150px;
+  height: 150px;
+  top: 25%;
+  left: 25%;
+  border-radius: 50%;
+  animation-name: shadow-rotation;
+  animation-duration: 5s;
+  animation-iteration-count: 10;
+}
+
+.bow {
+  position: absolute;
+  width: 170px;
+  height: 140px;
+  top: 40px;
+  left: 59px;
+  z-index: 1;
+}
+ 
+.bow:before, .bow:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 70px;
+  background: repeating-linear-gradient(90deg, #8E1313, #DDDDDD, #8E1313 40px);
+  border: 2px double #DDDDDD;
+  border-radius: 360px 900px 360px 0;
+  transform: rotate(225deg);
+  filter: blur(1.1px);
+}
+ 
+.bow:after {
+  left: auto;
+  right: 0;
+  border-radius: 360px 900px 360px 0;
+  transform:rotate(45deg);
+}
+
+.bow-center {
+  position: absolute;
+  width: 27px;
+  height: 30px;
+  border: 2px double #DDDDDD;
+  border-radius: 38%;
+  background: repeating-linear-gradient(125deg, #8E1313, white, #8E1313 40px);
+  top: 59.5px;
+  left: 130.8px;
+  filter: blur(0.5px);
+  z-index: 1;
+}
+
+.flare {
+  position: absolute;
+  width: 150px; 
+  height: 150px; 
+  border-radius: 50%;
+  box-shadow: inset 15px 15px 0 0 rgba(242, 242, 242, .14);
+  transform: rotate(180deg);
+  filter: blur(2px);
+}
+
+.dot-flare {
+  position: absolute;
+  width: 40px; 
+  height: 10px;
+  background: rgba(255, 255, 255, .15);
+  border-radius: 50%;
+  top: 10px;
+  left: 20px;
+  transform: rotate(-30deg);
+}
+
+.spark {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background: blue;
+  top: 50px;
+  left: 50px;
+  box-shadow: inset 0 0 10px 15px rgba(255, 255, 255, 1), 0 0 10px 25px rgba(255, 255, 255, .8);
+  border-radius: 90%;
+  animation: circle 5s ease infinite;
+  transform-origin: 100px 100px;
+}
+
+@keyframes shadow-rotation {
+  0% {
+    transform: rotate(-20deg);
+  }
+  
+  50% {
+    transform: rotate(60deg);
+  }
+  
+  100% {
+    transform: rotate(-20deg);
+  }
+  
+}
+
+@keyframes circle {
+  0% { 
+    transform: rotate(170deg); 
+  }
+  
+  50% { 
+    transform: rotate(260deg); 
+  }
+  
+  100% {
+    transform: rotate(170deg); 
+  }
+}
+
+@function random_range($min, $max) {
+  $rand: random();
+  $random_range: $min + floor($rand * (($max - $min) + 1));
+  @return $random_range;
+}
+
+.snow {
+  $total: 60;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: white;
+  border-radius: 50%;
+
+  @for $i from 1 through $total {
+    $random-x: random(1000000) * 0.0001vw;
+    $random-offset: random_range(-100000, 100000) * 0.0001vw;
+    $random-x-end: $random-x + $random-offset;
+    $random-x-end-yoyo: $random-x + ($random-offset / 2);
+    $random-yoyo-time: random_range(30000, 80000) / 100000;
+    $random-yoyo-y: $random-yoyo-time * 100vh;
+    $random-scale: random(10000) * 0.0001;
+    $fall-duration: random_range(10, 30) * 1s;
+    $fall-delay: random(30) * -1s;
+
+    &:nth-child(#{$i}) {
+      opacity: random(10000) * 0.0001;
+      transform: translate($random-x, -10px) scale($random-scale);
+      animation: fall-#{$i} $fall-duration $fall-delay linear infinite;
+    }
+
+    @keyframes fall-#{$i} {
+      #{percentage($random-yoyo-time)} {
+        transform: translate($random-x-end, $random-yoyo-y) scale($random-scale);
+      }
+      
+      to {
+        transform: translate($random-x-end-yoyo, 100vh) scale($random-scale);
+      }
+    }
+  }
+}
+
+.foreground {
+  z-index: 2;
+}
+
+.lightrope {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+  margin: -15px 0 0 0;
+  padding: 0;
+  pointer-events: none;
+  width: 305px;
+  height: 305px;
+  top: 0px;
+  left: -8px;
+  border-radius: 90%;
+  filter: blur(1.5px);
+  div {
+    position: relative;
+    animation-fill-mode: both; 
+    animation-iteration-count: infinite;
+    margin: 0;
+    padding: 0;
+    display: block;
+    width: $globe-width;
+    height: $globe-height;
+    border-radius: 50%;
+    margin: $globe-spacing/2;
+    display: inline-block;
+    background: rgba(0,247,165,1);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,1);
+    animation-name: flash-1;
+    animation-duration: 2s;
+    &:nth-child(2n+1) {
+      background: rgba(0,255,255,1);
+      box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,0.5);
+      animation-name: flash-2;
+      animation-duration: 0.4s;
+    }
+    &:nth-child(4n+2) {
+      background: rgba(247,0,148,1);
+      box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,1);
+      animation-name: flash-3;
+      animation-duration: 1.1s;
+    }
+    &:nth-child(odd) {
+      animation-duration: 1.8s;
+    }
+    &:nth-child(3n+1) {
+      animation-duration: 1.4s;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      background: #222;
+      width: ($globe-width - 2);
+      height: $globe-height/3;
+      border-radius: 3px;
+      top: (0 - ($globe-height/6));
+      left: 1px;
+    }
+    &:after {
+      content: "";
+      top: (0 - $globe-height/2);
+      left: $globe-width - 3;
+      position: absolute;
+      width: $globe-spacing + 12;
+      height: ($globe-height/3 * 2);
+      border-bottom: solid #222 2px;
+      border-radius: 50%;
+    }
+    &:last-child:after {
+      content: none;
+    }
+    &:first-child {
+      margin-left: -$globe-spacing;
+    }
+  }
+}
+
+@keyframes flash-1 { 
+    0%, 100% { background: rgba(0,247,165,1);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,1);} 
+    50% { background: rgba(0,247,165,$light-off-opacity);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,0.2);}
+}
+
+@keyframes flash-2 { 
+    0%, 100% { background: rgba(0,255,255,1);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,1);} 
+    50% { background: rgba(0,255,255,$light-off-opacity);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,0.2);}
+}
+
+@keyframes flash-3 { 
+    0%, 100% { background: rgba(247,0,148,1);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,1);} 
+    50% { background: rgba(247,0,148,$light-off-opacity);
+    box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,0.2);}
+}
+
+.left {
+  transform: rotate(-45deg);
+  div {
+    top: 25px;
+    left: 30px;
+  }
+}
+
+.right {
+  transform: rotate(45deg);
+  div {
+    top: 25px;
+    left: 45px;
+  }
+}
